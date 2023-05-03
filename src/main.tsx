@@ -7,6 +7,7 @@ import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from "./lib/store.ts";
+import { BrowserRouter } from "react-router-dom";
 
 const staleTime = 20 * 60 * 1000;
 
@@ -21,16 +22,18 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-      <ToastContainer
-        position="top-center"
-        hideProgressBar={true}
-        autoClose={2000}
-        theme={"dark"}
-      />
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <App />
+          <ToastContainer
+            position="top-center"
+            hideProgressBar={true}
+            autoClose={2000}
+            theme={"dark"}
+          />
+        </Provider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

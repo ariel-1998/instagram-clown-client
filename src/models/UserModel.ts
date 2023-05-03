@@ -44,6 +44,6 @@ export const userSchema = z.object({
   //   isActive: z.nativeEnum(IsActive),
 });
 
-type UserSchema = z.infer<typeof userSchema>;
+export type UserSchema = z.infer<typeof userSchema>;
 
 export interface UserForm extends UserSchema, FormData {}
