@@ -22,7 +22,12 @@ export interface UserModel {
 
 export const userSchema = z.object({
   //   id: z.number().optional(),
-  profileImg: z.instanceof(FileList).optional(),
+  profileImg: z
+    .instanceof(FileList)
+    // .refine(data => {
+    //   data
+    // })
+    .optional(),
 
   username: z
     .string()

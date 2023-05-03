@@ -4,24 +4,26 @@ import { UserForm, UserSchema, userSchema } from "../../../models/UserModel";
 import { authService } from "../../../services/authService";
 import { notifyService } from "../../../services/notifyService";
 import { Box, Button, CircularProgress } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { OutlinedInput } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import CustomFormGroup from "../../CustomComponents/CustomFormGroup/CustomFormGroup";
 
 function Register(): JSX.Element {
+  const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
   });
+  const isDirty = watch("password");
 
   const onSubmit = async (data: UserSchema) => {
-    console.log(data);
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("username", data.username);
     formData.append("password", data.password);
@@ -34,49 +36,36 @@ function Register(): JSX.Element {
     } catch (error) {
       notifyService.error(error);
     }
+    setIsLoading(false);
   };
 
   return (
     <>
-      {/* <form onSubmit={handleSubmit(onSubmit)}>
-        <h3>Register</h3>
-        <label>Username:</label>
-        <input type="text" {...register("username")} />
-        <br />
-        <label>Password:</label>
-        <input type="password" {...register("password")} />
-        <br />
-        <label>About me:</label>
-        <input type="text" {...register("aboutMe")} />
-        <br />
-        <label>Profile Image:</label>
-        <input type="file" {...register("profileImg")} />
-        <br />
-
-         <LoadingButton
-        loading={false}
-        variant="contained"
-        loadingIndicator={<CircularProgress color="inherit" size={16} />}
-      >
-        Submit
-      </LoadingButton>
-      <br />
-      <OutlinedInput className="what" type={show ? "text" : "password"} /> 
-      </form> */}
-      <Box>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <Box component={"div"} className="form-box">
+        <form className="form" onSubmit={handleSubmit(onSubmit)}>
           <CustomFormGroup
             type={"text"}
             label={"username"}
             register={{ ...register("username") }}
             errors={errors}
           />
-          <CustomFormGroup
-            type="password"
-            label={"password"}
-            register={{ ...register("password") }}
-            errors={errors}
-          />
+          <div className="relative">
+            <CustomFormGroup
+              type={show ? "text" : "password"}
+              label={"password"}
+              register={{ ...register("password") }}
+              errors={errors}
+            />
+
+            {isDirty && (
+              <div
+                className="password"
+                onClick={() => setShow((show) => !show)}
+              >
+                {show ? <FaRegEyeSlash /> : <FaRegEye />}
+              </div>
+            )}
+          </div>
           <CustomFormGroup
             type={"text"}
             label={"about me"}
@@ -85,12 +74,22 @@ function Register(): JSX.Element {
           />
           <CustomFormGroup
             type={"file"}
+            inputProps={{ accept: "image/*" }}
             register={{ ...register("profileImg") }}
             errors={errors}
           />
-          <br />
-          <Button type="submit" variant="contained">
-            Submit
+
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ height: 30, bgcolor: "rgb(0, 149, 246)" }}
+          >
+            {!isLoading ? (
+              "Submit"
+            ) : (
+              <CircularProgress size={16} sx={{ color: "#fff" }} />
+            )}
           </Button>
         </form>
       </Box>

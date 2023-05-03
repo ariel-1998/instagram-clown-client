@@ -1,6 +1,25 @@
-.Register {
+.form-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 90%;
+  margin: auto;
 }
-.what {
-  background-color: #fff;
-  height: 30px;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  gap: 30px;
+  max-width: 350px;
+}
+
+.relative {
+  position: relative;
+}
+
+.password {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
 }
