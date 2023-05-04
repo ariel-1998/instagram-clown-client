@@ -9,17 +9,18 @@ import {
 } from "@mui/material";
 import "./CustomFormGroup.css";
 import { forwardRef, useState } from "react";
-import { FieldErrors, UseFormRegisterReturn, useForm } from "react-hook-form";
+import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
 
 interface CustomFormGroupProps extends InputProps {
   type: string;
   label?: string;
   register: UseFormRegisterReturn;
   errors?: FieldErrors;
+  isDirty?: string;
 }
 
 function CustomFormGroup(
-  { type, label, register, errors, ...rest }: CustomFormGroupProps,
+  { type, label, register, errors, isDirty, ...rest }: CustomFormGroupProps,
   ref: React.Ref<HTMLInputElement>
 ): JSX.Element {
   const { name } = register;
@@ -27,17 +28,24 @@ function CustomFormGroup(
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
+    console.log(isDirty);
+
     setFocused(true);
+    console.log(isDirty);
   };
 
   const handleBlur = () => {
+    console.log(isDirty);
     setFocused(false);
+    console.log(isDirty);
   };
 
   return (
     <Box component={"div"} className="CustomFormGroup">
       <FormGroup sx={{ position: "relative", bgcolor: "rgb(250, 250, 250)" }}>
-        <FormControl onBlur={handleBlur}>
+        <FormControl
+          onBlur={!isDirty && type !== "file" ? handleBlur : () => null}
+        >
           {label && (
             <InputLabel
               sx={{
@@ -55,7 +63,8 @@ function CustomFormGroup(
           )}
           <OutlinedInput
             className="input"
-            onFocus={handleFocus}
+            sx={{ padding: 0 }}
+            onFocus={!isDirty && type !== "file" ? handleFocus : () => null}
             type={type}
             {...register}
             {...rest}

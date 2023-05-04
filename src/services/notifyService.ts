@@ -21,7 +21,7 @@ class NotifyService {
       if (Array.isArray(e.response.data.message)) {
         return e.response.data.message.join("\n");
       }
-      return e.response.data;
+      return e.response.data.message;
     }
     if (e?.message) {
       return e.message;
