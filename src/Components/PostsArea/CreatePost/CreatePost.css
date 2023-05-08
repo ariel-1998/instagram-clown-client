@@ -1,0 +1,22 @@
+.CreatePost {
+}
+.send-icon {
+  color: rgba(61, 174, 234, 0.9);
+
+  font-size: 38px;
+}
+
+.send-icon-div:hover .send-icon {
+  color: rgba(61, 174, 234, 0.7);
+}
+
+.send-icon-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    color: red;
+    cursor: pointer;
+  }
+}

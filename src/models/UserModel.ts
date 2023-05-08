@@ -12,7 +12,7 @@ export enum IsActive {
 
 export interface UserModel {
   id: number;
-  profileImg: string;
+  profileImg: FileList;
   username: string;
   password: string;
   aboutMe: string;

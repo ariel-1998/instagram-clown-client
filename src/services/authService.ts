@@ -1,6 +1,6 @@
 import axios from "axios";
 import { apiConfig } from "../utils/apiConfig";
-import { UserForm, UserSchema } from "../models/UserModel";
+import { UserForm, UserModel, UserSchema } from "../models/UserModel";
 import { store } from "../lib/store";
 import { login } from "../lib/authSlice";
 
@@ -9,7 +9,7 @@ class AuthService {
   private loginEndpoint = "/login";
 
   async register(user: UserForm): Promise<number> {
-    const { data, status } = await axios.post<string>(
+    const { data, status } = await axios.post<UserModel>(
       apiConfig.BASE_URL + this.registerEndpoint,
       user,
       {
@@ -21,7 +21,7 @@ class AuthService {
   }
 
   async login(credentials: UserSchema) {
-    const { data } = await axios.post<string>(
+    const { data } = await axios.post<UserModel>(
       apiConfig.BASE_URL + this.loginEndpoint,
       credentials,
       {

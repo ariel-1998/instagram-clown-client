@@ -26,10 +26,9 @@ function Login(): JSX.Element {
     setIsLoading(true);
     try {
       await authService.login(data);
-      notifyService.info("cookie");
+      //need to add redirect
     } catch (error) {
       notifyService.error(error);
-      console.log(error);
     }
     setIsLoading(false);
   };

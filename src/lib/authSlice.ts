@@ -18,17 +18,17 @@ import jwtDecode from "jwt-decode";
 //   },
 // });
 
-interface UserToken
-  extends Pick<UserModel, "id" | "username" | "role" | "profileImg"> {}
+// interface UserToken
+//   extends Pick<UserModel, "id" | "username" | "role" | "profileImg"> {}
 
-let initialState: UserToken | null = null;
+let initialState: UserModel | null = null;
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state: UserToken | null, action: PayloadAction<string>) => {
-      state = jwtDecode<UserToken>(action.payload);
+    login: (state: UserModel | null, action: PayloadAction<UserModel>) => {
+      state = action.payload;
     },
     logout: (state) => {
       state = null;

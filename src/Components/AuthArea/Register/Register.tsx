@@ -3,7 +3,7 @@ import "./Register.css";
 import { UserForm, UserSchema, userSchema } from "../../../models/UserModel";
 import { authService } from "../../../services/authService";
 import { notifyService } from "../../../services/notifyService";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -47,6 +47,17 @@ function Register(): JSX.Element {
     <Box component={"div"} className="form-box">
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <CustomFormGroup
+          type={"file"}
+          isDirty={isDirty.profileImg?.[0]?.name}
+          accept="image/*"
+          register={{ ...register("profileImg") }}
+          errors={errors}
+        />
+        <Typography sx={{ textAlign: "center", height: 10 }} component="span">
+          {isDirty.profileImg?.[0] ? "Change" : "Choose"} profile
+        </Typography>
+
+        <CustomFormGroup
           isDirty={isDirty.username}
           type={"text"}
           label={"username"}
@@ -73,12 +84,6 @@ function Register(): JSX.Element {
           type={"text"}
           label={"about me"}
           register={{ ...register("aboutMe") }}
-          errors={errors}
-        />
-        <CustomFormGroup
-          type={"file"}
-          inputProps={{ accept: "image/*" }}
-          register={{ ...register("profileImg") }}
           errors={errors}
         />
 

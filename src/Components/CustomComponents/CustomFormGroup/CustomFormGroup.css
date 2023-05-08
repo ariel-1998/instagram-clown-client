@@ -6,3 +6,10 @@
 .input {
   height: 45px;
 }
+
+.plus-icon {
+  position: absolute;
+  bottom: 10%;
+  right: 39%;
+  color: rgba(10, 67, 62, 0.7);
+}
