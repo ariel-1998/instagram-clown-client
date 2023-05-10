@@ -9,8 +9,9 @@ import AuthedLayout from "./Components/AuthedLayout/AuthedLayout";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/home" />} />
-      <Route path="/home" element={<CreatePost />} />
+      <Route path="/" element={<AuthedLayout />}>
+        <Route path="create-post" element={<CreatePost />} />
+      </Route>
       {/* unauthorized layout */}
       <Route path="/auth" element={<GuestLayout />}>
         <Route path="register" element={<Register />} />

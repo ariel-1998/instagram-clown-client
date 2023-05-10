@@ -3,15 +3,25 @@ import "./Register.css";
 import { UserForm, UserSchema, userSchema } from "../../../models/UserModel";
 import { authService } from "../../../services/authService";
 import { notifyService } from "../../../services/notifyService";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import CustomFormGroup from "../../CustomComponents/CustomFormGroup/CustomFormGroup";
+import CustomButton from "../../CustomComponents/CustomButton/CustomButton";
+import { MdAccountCircle } from "react-icons/md";
+import { BsPlusCircle } from "react-icons/bs";
 
 function Register(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -48,11 +58,16 @@ function Register(): JSX.Element {
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <CustomFormGroup
           type={"file"}
-          isDirty={isDirty.profileImg?.[0]?.name}
           accept="image/*"
           register={{ ...register("profileImg") }}
           errors={errors}
-        />
+        >
+          <MdAccountCircle size={80} color={"rgb(0,0,0,0.2)"} />
+          {!isDirty.profileImg?.[0] && (
+            <BsPlusCircle className="plus-icon" size={28} />
+          )}
+        </CustomFormGroup>
+
         <Typography sx={{ textAlign: "center", height: 10 }} component="span">
           {isDirty.profileImg?.[0] ? "Change" : "Choose"} profile
         </Typography>
@@ -68,18 +83,20 @@ function Register(): JSX.Element {
           <CustomFormGroup
             isDirty={isDirty.password}
             type={show ? "text" : "password"}
+            autoComplete="off"
             label={"password"}
             register={{ ...register("password") }}
             errors={errors}
           />
 
           {isDirty.password && (
-            <div className="password" onClick={() => setShow((show) => !show)}>
+            <Box className="password" onClick={() => setShow((show) => !show)}>
               {show ? <FaRegEyeSlash /> : <FaRegEye />}
-            </div>
+            </Box>
           )}
         </div>
         <CustomFormGroup
+          autoComplete="off"
           isDirty={isDirty.aboutMe}
           type={"text"}
           label={"about me"}
@@ -87,18 +104,13 @@ function Register(): JSX.Element {
           errors={errors}
         />
 
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          sx={{ height: 30, bgcolor: "rgb(0, 149, 246)" }}
-        >
+        <CustomButton type="submit">
           {!isLoading ? (
             "Submit"
           ) : (
             <CircularProgress size={16} sx={{ color: "#fff" }} />
           )}
-        </Button>
+        </CustomButton>
       </form>
     </Box>
   );

@@ -1,19 +1,26 @@
-import { MenuItem, IconButton, Badge, Typography } from "@mui/material";
-import { FaFacebookMessenger } from "react-icons/fa";
+import { MenuItem, IconButton, Typography } from "@mui/material";
 import "./CustomMenuItem.css";
 import { ReactNode } from "react";
 
 interface CustomMenuItemProps {
   children: ReactNode;
   itemName?: string;
+  className?: string;
+  onClick?: any;
 }
 
 function CustomMenuItem({
   children,
   itemName,
+  className,
+  onClick,
 }: CustomMenuItemProps): JSX.Element {
   return (
-    <MenuItem className="menu-item">
+    <MenuItem
+      onClick={onClick}
+      className={`menu-item ${className}`}
+      sx={{ width: "90%", borderRadius: "10px" }}
+    >
       {/** in phones iconButton should be small */}
       <IconButton size="medium" color="inherit" disableRipple>
         {children}

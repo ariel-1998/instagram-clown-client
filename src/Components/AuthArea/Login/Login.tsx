@@ -8,6 +8,7 @@ import { authService } from "../../../services/authService";
 import { notifyService } from "../../../services/notifyService";
 import CustomFormGroup from "../../CustomComponents/CustomFormGroup/CustomFormGroup";
 import "./Login.css";
+import CustomButton from "../../CustomComponents/CustomButton/CustomButton";
 
 function Login(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +49,7 @@ function Login(): JSX.Element {
             isDirty={isDirty.password}
             type={show ? "text" : "password"}
             label={"password"}
+            autoComplete="off"
             register={{ ...register("password") }}
             errors={errors}
           />
@@ -59,18 +61,13 @@ function Login(): JSX.Element {
           )}
         </div>
 
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          sx={{ height: 30, bgcolor: "rgb(0, 149, 246)" }}
-        >
+        <CustomButton type="submit">
           {!isLoading ? (
             "Submit"
           ) : (
             <CircularProgress size={16} sx={{ color: "#fff" }} />
           )}
-        </Button>
+        </CustomButton>
       </form>
     </Box>
   );

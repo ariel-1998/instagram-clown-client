@@ -5,4 +5,5 @@ export interface PostModel {
   likes: number;
   isLiked: boolean;
   createdAt: Date;
+  location: string;
 }

@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import "./CustomFormGroup.css";
-import { forwardRef, useState } from "react";
+import { ReactNode, forwardRef, useState } from "react";
 import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
 import { MdAccountCircle } from "react-icons/md";
 import { BsPlusCircle } from "react-icons/bs";
@@ -22,6 +22,7 @@ interface CustomFormGroupProps extends InputProps {
   errors?: FieldErrors;
   isDirty?: string;
   accept?: string;
+  children?: ReactNode;
 }
 
 function CustomFormGroup(
@@ -32,6 +33,7 @@ function CustomFormGroup(
     errors,
     isDirty,
     accept,
+    children,
     ...rest
   }: CustomFormGroupProps,
   ref: React.Ref<HTMLInputElement>
@@ -41,16 +43,11 @@ function CustomFormGroup(
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
-    console.log(isDirty);
-
     setFocused(true);
-    console.log(isDirty);
   };
 
   const handleBlur = () => {
-    console.log(isDirty);
     setFocused(false);
-    console.log(isDirty);
   };
 
   let inputLabel = label ? (
@@ -80,14 +77,13 @@ function CustomFormGroup(
           component="label"
         >
           <input hidden {...register} accept={accept} type="file" />
-          <MdAccountCircle size={80} color={"rgb(0,0,0,0.2)"} />
-          {!isDirty && <BsPlusCircle className="plus-icon" size={28} />}
+          {children}
         </IconButton>
       </>
     ) : (
       <OutlinedInput
+        inputProps={{ style: { padding: 10 } }}
         className="input"
-        sx={{ padding: 0 }}
         onFocus={!isDirty ? handleFocus : () => null}
         type={type}
         {...register}
@@ -124,38 +120,3 @@ function CustomFormGroup(
 }
 
 export default forwardRef(CustomFormGroup);
-{
-  /* <Box component={"div"} className="CustomFormGroup">
-<FormGroup sx={{ position: "relative", bgcolor: "rgb(250, 250, 250)" }}>
-  <FormControl onBlur={!isDirty ? handleBlur : () => null}>
-    {label && (
-      <InputLabel
-        component={"label"}
-        sx={{
-          top: focused ? 0 : "50%",
-          left: 50,
-          transform:
-            (focused &&
-              "translate(0, 1.5px) translateX(-50%) scale(0.65)") ||
-            "translate(-50%, -50%)",
-          transition: "all 0.2s ease-in-out",
-        }}
-      >
-        {label}
-      </InputLabel>
-    )}
-    <OutlinedInput
-      className="input"
-      sx={{ padding: 0 }}
-      onFocus={!isDirty ? handleFocus : () => null}
-      type={type}
-      {...register}
-      {...rest}
-    />
-  </FormControl>
-</FormGroup>
-{errors?.[name] && (
-  <FormHelperText>{errors[name]?.message as string}</FormHelperText>
-)}
-</Box> */
-}
