@@ -4,23 +4,25 @@ import { UserForm, UserSchema, userSchema } from "../../../models/UserModel";
 import { authService } from "../../../services/authService";
 import { notifyService } from "../../../services/notifyService";
 import {
+  Avatar,
   Box,
-  Button,
   CircularProgress,
-  IconButton,
+  Stack,
   Typography,
 } from "@mui/material";
+import { Add } from "@mui/icons-material/";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import CustomFormGroup from "../../CustomComponents/CustomFormGroup/CustomFormGroup";
 import CustomButton from "../../CustomComponents/CustomButton/CustomButton";
-import { MdAccountCircle } from "react-icons/md";
-import { BsPlusCircle } from "react-icons/bs";
+import CustomFileInput from "../../CustomComponents/CustomFileInput/CustomFileInput";
 
 function Register(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
+  const [image, setImage] = useState("");
 
   const {
     register,
@@ -30,7 +32,7 @@ function Register(): JSX.Element {
   } = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
   });
-  const isDirty = watch();
+  const { username, password, aboutMe } = watch();
 
   const onSubmit = async (data: UserSchema) => {
     setIsLoading(true);
@@ -53,54 +55,81 @@ function Register(): JSX.Element {
     setIsLoading(false);
   };
 
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0];
+    if (file) return setImage(URL.createObjectURL(file));
+    setImage("");
+  };
+
   return (
-    <Box component={"div"} className="form-box">
-      <form className="form" onSubmit={handleSubmit(onSubmit)}>
-        <CustomFormGroup
-          type={"file"}
-          accept="image/*"
-          register={{ ...register("profileImg") }}
-          errors={errors}
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <Stack direction="column" spacing={2} minWidth={300}>
+        <Typography
+          textAlign={"center"}
+          variant="h6"
+          component="div"
+          sx={{ p: 0 }}
         >
-          <MdAccountCircle size={80} color={"rgb(0,0,0,0.2)"} />
-          {!isDirty.profileImg?.[0] && (
-            <BsPlusCircle className="plus-icon" size={28} />
-          )}
-        </CustomFormGroup>
-
-        <Typography sx={{ textAlign: "center", height: 10 }} component="span">
-          {isDirty.profileImg?.[0] ? "Change" : "Choose"} profile
+          Register
         </Typography>
+        <CustomFileInput
+          {...register("profileImg", {
+            onChange: (e) => handleFileSelect(e),
+          })}
+        >
+          <Box width={100} height={100}>
+            <Avatar
+              src={image}
+              sx={{
+                position: "absolute",
+                height: "100%",
+                width: "100%",
+                "&:hover": { cursor: "pointer" },
+              }}
+            />
+            {image.length === 0 && (
+              <Add
+                sx={{
+                  position: "absolute",
+                  width: "40%",
+                  height: "40%",
+                  bottom: 0,
+                  right: "-8%",
+                }}
+              />
+            )}
+          </Box>
+        </CustomFileInput>
 
         <CustomFormGroup
-          isDirty={isDirty.username}
+          isDirty={username}
           type={"text"}
           label={"username"}
-          register={{ ...register("username") }}
+          {...register("username")}
           errors={errors}
         />
-        <div className="relative">
+        <Box className="relative">
           <CustomFormGroup
-            isDirty={isDirty.password}
+            isDirty={password}
             type={show ? "text" : "password"}
             autoComplete="off"
             label={"password"}
-            register={{ ...register("password") }}
+            {...register("password")}
             errors={errors}
           />
 
-          {isDirty.password && (
+          {password && (
             <Box className="password" onClick={() => setShow((show) => !show)}>
               {show ? <FaRegEyeSlash /> : <FaRegEye />}
             </Box>
           )}
-        </div>
+        </Box>
         <CustomFormGroup
           autoComplete="off"
-          isDirty={isDirty.aboutMe}
+          isDirty={aboutMe}
           type={"text"}
           label={"about me"}
-          register={{ ...register("aboutMe") }}
+          {...register("aboutMe")}
           errors={errors}
         />
 
@@ -111,8 +140,8 @@ function Register(): JSX.Element {
             <CircularProgress size={16} sx={{ color: "#fff" }} />
           )}
         </CustomButton>
-      </form>
-    </Box>
+      </Stack>
+    </form>
   );
 }
 

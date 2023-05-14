@@ -1,13 +1,11 @@
-.navbar.a {
-  width: 50px;
-}
-
-.active {
+a.active.linkActive {
   font-weight: bold;
+  color: red;
 }
 
 a {
   text-decoration: none;
+  width: 100%;
   color: inherit;
 }
 

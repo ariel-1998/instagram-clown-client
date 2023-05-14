@@ -1,22 +1,21 @@
-import { IconButton } from "@mui/material";
+import { Box, IconButton, Stack } from "@mui/material";
 import "./CustomFileInput.css";
 import React, { ForwardedRef, ReactNode, forwardRef, useRef } from "react";
 import { RefCallBack, UseFormRegisterReturn } from "react-hook-form";
 import CustomButton from "../CustomButton/CustomButton";
 
-interface CustomFileInputProps
-  extends React.DetailedHTMLProps<
+type CustomFileInputProps = {
+  children: ReactNode;
+} & UseFormRegisterReturn &
+  React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
-  > {
-  register: UseFormRegisterReturn;
-  children: ReactNode;
-}
+  >;
 
 const CustomFileInput = forwardRef<
   HTMLInputElement | undefined,
   CustomFileInputProps
->(({ register, children, ...props }, ref) => {
+>(({ children, ...rest }, ref) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -29,8 +28,7 @@ const CustomFileInput = forwardRef<
         type="file"
         id="upload-file"
         style={{ display: "none" }}
-        {...props}
-        {...register}
+        {...rest}
         ref={(e) => {
           // set the ref value for both the local ref and the one passed from the parent component
           inputRef.current = e;
@@ -41,8 +39,15 @@ const CustomFileInput = forwardRef<
           }
         }}
       />
-      <div onClick={handleClick}>{children}</div>
-      {/* <IconButton onClick={handleUploadClick}>{children}</IconButton> */}
+      <Stack alignItems={"center"}>
+        <Stack
+          onClick={handleClick}
+          position={"relative"}
+          width={"fit-content"}
+        >
+          {children}
+        </Stack>
+      </Stack>
     </>
   );
 });

@@ -6,40 +6,24 @@ import {
   InputProps,
   OutlinedInput,
   Box,
-  IconButton,
-  Typography,
 } from "@mui/material";
 import "./CustomFormGroup.css";
 import { ReactNode, forwardRef, useState } from "react";
 import { FieldErrors, UseFormRegisterReturn } from "react-hook-form";
-import { MdAccountCircle } from "react-icons/md";
-import { BsPlusCircle } from "react-icons/bs";
 
-interface CustomFormGroupProps extends InputProps {
-  type: string;
+type CustomFormGroupProps = {
   label?: string;
-  register: UseFormRegisterReturn;
   errors?: FieldErrors;
-  isDirty?: string;
-  accept?: string;
   children?: ReactNode;
-}
+  isDirty?: string;
+} & InputProps &
+  UseFormRegisterReturn;
 
 function CustomFormGroup(
-  {
-    type,
-    label,
-    register,
-    errors,
-    isDirty,
-    accept,
-    children,
-    ...rest
-  }: CustomFormGroupProps,
+  { label, errors, isDirty, children, ...rest }: CustomFormGroupProps,
   ref: React.Ref<HTMLInputElement>
 ): JSX.Element {
-  const { name } = register;
-
+  const { name } = rest;
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
@@ -66,30 +50,15 @@ function CustomFormGroup(
     </InputLabel>
   ) : null;
 
-  let input =
-    type === "file" ? (
-      <>
-        <IconButton
-          sx={{ position: "relative", height: 80 }}
-          disableFocusRipple
-          disableRipple
-          aria-label="upload picture"
-          component="label"
-        >
-          <input hidden {...register} accept={accept} type="file" />
-          {children}
-        </IconButton>
-      </>
-    ) : (
-      <OutlinedInput
-        inputProps={{ style: { padding: 10 } }}
-        className="input"
-        onFocus={!isDirty ? handleFocus : () => null}
-        type={type}
-        {...register}
-        {...rest}
-      />
-    );
+  let input = (
+    <OutlinedInput
+      inputProps={{ style: { padding: 10 } }}
+      className="input"
+      onFocus={isDirty ? () => null : handleFocus}
+      {...rest}
+      ref={ref}
+    />
+  );
 
   const errorSpan = errors?.[name] && (
     <FormHelperText>{errors[name]?.message as string}</FormHelperText>
@@ -101,12 +70,10 @@ function CustomFormGroup(
         sx={{
           height: "fit-content",
           position: "relative",
-          bgcolor: type !== "file" ? "rgb(250, 250, 250)" : "inherit",
+          bgcolor: "rgb(250, 250, 250)",
         }}
       >
-        <FormControl
-          onBlur={!isDirty && type !== "file" ? handleBlur : () => null}
-        >
+        <FormControl onBlur={isDirty ? () => null : handleBlur}>
           {inputLabel}
           {input}
         </FormControl>

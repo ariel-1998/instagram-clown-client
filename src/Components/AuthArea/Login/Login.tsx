@@ -1,5 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
@@ -21,7 +27,7 @@ function Login(): JSX.Element {
   } = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
   });
-  const isDirty = watch();
+  const { username, password } = watch();
 
   const onSubmit = async (data: UserSchema) => {
     setIsLoading(true);
@@ -35,31 +41,39 @@ function Login(): JSX.Element {
   };
 
   return (
-    <Box component={"div"} className="form-box">
-      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <Stack direction="column" spacing={2} minWidth={300}>
+        <Typography
+          textAlign={"center"}
+          variant="h6"
+          component="div"
+          sx={{ p: 0 }}
+        >
+          Login
+        </Typography>
         <CustomFormGroup
-          isDirty={isDirty.username}
+          isDirty={username}
           type={"text"}
           label={"username"}
-          register={{ ...register("username") }}
+          {...register("username")}
           errors={errors}
         />
-        <div className="relative">
+        <Box className="relative">
           <CustomFormGroup
-            isDirty={isDirty.password}
+            isDirty={password}
             type={show ? "text" : "password"}
-            label={"password"}
             autoComplete="off"
-            register={{ ...register("password") }}
+            label={"password"}
+            {...register("password")}
             errors={errors}
           />
 
-          {isDirty.password && (
-            <div className="password" onClick={() => setShow((show) => !show)}>
+          {password && (
+            <Box className="password" onClick={() => setShow((show) => !show)}>
               {show ? <FaRegEyeSlash /> : <FaRegEye />}
-            </div>
+            </Box>
           )}
-        </div>
+        </Box>
 
         <CustomButton type="submit">
           {!isLoading ? (
@@ -68,8 +82,8 @@ function Login(): JSX.Element {
             <CircularProgress size={16} sx={{ color: "#fff" }} />
           )}
         </CustomButton>
-      </form>
-    </Box>
+      </Stack>
+    </form>
   );
 }
 
