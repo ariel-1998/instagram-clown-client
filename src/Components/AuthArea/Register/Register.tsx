@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import "./Register.css";
-import { UserForm, UserSchema, userSchema } from "../../../models/UserModel";
+import { UserSchema, userSchema } from "../../../models/UserModel";
 import { authService } from "../../../services/authService";
 import { notifyService } from "../../../services/notifyService";
 import {
@@ -13,16 +13,17 @@ import {
 import { Add } from "@mui/icons-material/";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import CustomFormGroup from "../../CustomComponents/CustomFormGroup/CustomFormGroup";
 import CustomButton from "../../CustomComponents/CustomButton/CustomButton";
-import CustomFileInput from "../../CustomComponents/CustomFileInput/CustomFileInput";
+import { useNavigate } from "react-router-dom";
 
 function Register(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const [image, setImage] = useState("");
+  const navigate = useNavigate();
+  // const [image, setImage] = useState("");
 
   const {
     register,
@@ -36,30 +37,21 @@ function Register(): JSX.Element {
 
   const onSubmit = async (data: UserSchema) => {
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("username", data.username);
-    formData.append("password", data.password);
-    formData.append("aboutMe", data.aboutMe ?? "");
-    data.profileImg?.[0] && formData.append("profileImg", data.profileImg[0]);
-
     try {
-      const status = await authService.register(formData as UserForm);
-      if (status === 206)
-        notifyService.success(
-          "Welcome, there was a problem with the profile image try updating it"
-        );
-      else notifyService.success("Successfully created account");
+      await authService.register(data);
+      navigate("/");
+      notifyService.success("Successfully created account");
     } catch (error) {
       notifyService.error(error);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
-  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target?.files?.[0];
-    if (file) return setImage(URL.createObjectURL(file));
-    setImage("");
-  };
+  // const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target?.files?.[0];
+  //   if (file) return setImage(URL.createObjectURL(file));
+  //   setImage("");
+  // };
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -72,7 +64,7 @@ function Register(): JSX.Element {
         >
           Register
         </Typography>
-        <CustomFileInput
+        {/* <CustomFileInput
           {...register("profileImg", {
             onChange: (e) => handleFileSelect(e),
           })}
@@ -99,7 +91,7 @@ function Register(): JSX.Element {
               />
             )}
           </Box>
-        </CustomFileInput>
+        </CustomFileInput> */}
 
         <CustomFormGroup
           isDirty={username}

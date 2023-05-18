@@ -12,8 +12,10 @@ function AuthedLayout(): JSX.Element {
     //   </Box>
     // </Box>
 
-    <Grid container width={"100vw"} height={"100vh"}>
-      <Navbar />
+    <Grid container width={"100vw"} height={"100vh"} bgcolor={"gray"}>
+      <Grid item xs={2.3} bgcolor={"green"}>
+        <Navbar />
+      </Grid>
       <Outlet />
     </Grid>
   );

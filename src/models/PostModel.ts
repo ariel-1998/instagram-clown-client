@@ -1,19 +1,24 @@
 import { z } from "zod";
+import { BooleanDB } from "./UserModel";
+
+const MAX_FILE_SIZE = 20 * 1024 * 1024;
 
 export interface PostModel {
-  postImg: number;
-  text?: string;
+  id: number;
   userId: number;
+  postImg: number;
+  text: string;
+  title: string;
+  createdAt?: Date;
+  isSingleImge?: BooleanDB;
   likes: number;
   isLiked: boolean;
-  createdAt: Date;
-  location?: string;
 }
 
 export const postSchema = z.object({
   postImg: z.instanceof(FileList),
   text: z.string().max(700, "Post text is limited to 700 chars").optional(),
-  location: z.string().max(45, "Location is limited to 45 chars"),
+  title: z.string().max(90, "Title is limited to 90 chars"),
 });
 
 export type PostForm = z.infer<typeof postSchema>;

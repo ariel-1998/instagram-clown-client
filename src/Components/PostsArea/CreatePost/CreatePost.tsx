@@ -22,15 +22,9 @@ function CreatePost(): JSX.Element {
         <CustomButton>click</CustomButton>
       </CustomFileInput>
 
-      <CustomFormGroup
-        autoComplete="off"
-        {...register("text")}
-      ></CustomFormGroup>
+      <CustomFormGroup autoComplete="off" {...register("text")} />
 
-      <CustomFormGroup
-        autoComplete="off"
-        {...register("location")}
-      ></CustomFormGroup>
+      <CustomFormGroup autoComplete="off" {...register("location")} />
     </form>
   );
 }

@@ -1,15 +1,16 @@
 import axios from "axios";
 import { apiConfig } from "../utils/apiConfig";
-import { UserForm, UserModel, UserSchema } from "../models/UserModel";
+import { UserModel, UserSchema } from "../models/UserModel";
 import { store } from "../lib/store";
-import { login } from "../lib/authSlice";
+import { login, logout } from "../lib/authSlice";
 
 class AuthService {
-  private registerEndpoint = "/register";
-  private loginEndpoint = "/login";
+  private registerEndpoint = "/auth/register";
+  private loginEndpoint = "/auth/login";
+  private logoutEndpoint = "/auth/login";
 
-  async register(user: UserForm): Promise<number> {
-    const { data, status } = await axios.post<UserModel>(
+  async register(user: UserSchema) {
+    const { data } = await axios.post<UserModel>(
       apiConfig.BASE_URL + this.registerEndpoint,
       user,
       {
@@ -17,7 +18,6 @@ class AuthService {
       }
     );
     store.dispatch(login(data));
-    return status;
   }
 
   async login(credentials: UserSchema) {
@@ -29,6 +29,23 @@ class AuthService {
       }
     );
     store.dispatch(login(data));
+  }
+
+  async getLogin() {
+    const { data } = await axios.get<UserModel>(
+      apiConfig.BASE_URL + this.loginEndpoint,
+      {
+        withCredentials: true,
+      }
+    );
+    store.dispatch(login(data));
+  }
+
+  async logout() {
+    await axios.delete(apiConfig.BASE_URL + this.logoutEndpoint, {
+      withCredentials: true,
+    });
+    store.dispatch(logout());
   }
 }
 

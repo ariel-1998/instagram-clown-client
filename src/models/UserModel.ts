@@ -5,29 +5,34 @@ export enum UserRole {
   Admin = "admin",
 }
 
-export enum IsActive {
+export enum BooleanDB {
   True = 1,
   false = 0,
 }
 
 export interface UserModel {
   id: number;
-  profileImg: FileList;
+  profileImg?: FileList;
   username: string;
-  password: string;
-  aboutMe: string;
+  password?: string;
+  aboutMe?: string;
   role: UserRole;
-  isActive: IsActive;
+  isActive: BooleanDB;
+  isfollowed?: boolean;
+  followersAmout: number;
+  followingAmount: number;
+  postsAmount: number;
 }
 
 export const userSchema = z.object({
   //   id: z.number().optional(),
-  profileImg: z
-    .instanceof(FileList)
-    // .refine(data => {
-    //   data
-    // })
-    .optional(),
+
+  // profileImg: z
+  //   .instanceof(FileList)
+  //   // .refine(data => {
+  //   //   data
+  //   // })
+  //   .optional(),
 
   username: z
     .string()

@@ -7,6 +7,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
   styled,
 } from "@mui/material";
 import { FaFacebookMessenger } from "react-icons/fa";
@@ -91,7 +92,13 @@ function Navbar(): JSX.Element {
             <ListItemIcon>
               <AiFillHome />
             </ListItemIcon>
-            <ListItemText primary="home" sx={{ color: homeColor }} />
+            <Typography
+              fontSize={"1.25rem"}
+              color={homeColor}
+              variant="subtitle1"
+            >
+              Home
+            </Typography>
           </ListItemButton>
         </MyListItem>
 
@@ -100,7 +107,13 @@ function Navbar(): JSX.Element {
             <ListItemIcon>
               <FaFacebookMessenger />
             </ListItemIcon>
-            <ListItemText sx={{ color: messagesColor }} primary="reg" />
+            <Typography
+              fontSize={"1.25rem"}
+              color={messagesColor}
+              variant="subtitle1"
+            >
+              Messages
+            </Typography>
           </ListItemButton>
         </MyListItem>
 
@@ -116,7 +129,9 @@ function Navbar(): JSX.Element {
               }}
             >
               <ListItemIcon></ListItemIcon>
-              <ListItemText primary="log" />
+              <Typography fontSize={"1.25rem"} variant="subtitle1">
+                Add
+              </Typography>
             </ListItemButton>
             <CreatePost />
           </CustomModal>

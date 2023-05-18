@@ -1,38 +1,21 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { UserModel } from "../models/UserModel";
-import jwtDecode from "jwt-decode";
 
-// interface UserToken
-//   extends Pick<UserModel, "id" | "username" | "role" | "profileImg"> {}
+type AuthState = UserModel | null;
 
-// let initialState: UserToken | null = null;
-
-// const authSlice = createSlice({
-//   name: "auth",
-//   initialState,
-//   reducers: {
-//     login: (state, action: PayloadAction<string>) => {
-//       state = jwtDecode<UserToken>(action.payload);
-//       return state;
-//     },
-//   },
-// });
-
-// interface UserToken
-//   extends Pick<UserModel, "id" | "username" | "role" | "profileImg"> {}
-
-let initialState: UserModel | null = null;
+const initialState = null as AuthState;
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state: UserModel | null, action: PayloadAction<UserModel>) => {
+    login: (state, action: PayloadAction<UserModel>) => {
       state = action.payload;
+      return state;
     },
     logout: (state) => {
       state = null;
-      return state;
+      return null;
     },
   },
 });

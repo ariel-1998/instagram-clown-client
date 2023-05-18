@@ -65,7 +65,7 @@ function CustomFormGroup(
   );
 
   const content = (
-    <Box component={"div"} className="CustomFormGroup">
+    <Box component={"div"} className="CustomFormGroup" sx={{ pb: 3 }}>
       <FormGroup
         sx={{
           height: "fit-content",
