@@ -6,29 +6,43 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
-  Typography,
+  Stack,
   styled,
+  useTheme,
 } from "@mui/material";
-import { FaFacebookMessenger } from "react-icons/fa";
-import { FiPlusSquare } from "react-icons/fi";
+import { FaFacebookMessenger, FaRegPlusSquare } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import "./Navbar.css";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import CustomModal from "../../CustomComponents/CustomModal/CustomModal";
 import { useState } from "react";
 import CreatePost from "../../PostsArea/CreatePost/CreatePost";
+import CustomTypo from "../../CustomComponents/CustomTypo";
 
 const MyListItem = styled(ListItem)({
-  padding: 0,
+  padding: 2,
+  "&:hover": {
+    borderRadius: "50px",
+  },
+});
+
+const MyListItemIcon = styled(ListItemIcon)({
+  gap: 10,
+  alignItems: "center",
 });
 
 function Navbar(): JSX.Element {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { typography } = useTheme();
 
-  const homeColor = location.pathname === "/" ? "blue" : "inherit";
-  const messagesColor = location.pathname === "/messages" ? "blue" : "inherit";
+  const homeFont =
+    pathname === "/" ? typography.fontWeightBold : typography.fontWeightMedium;
+
+  const messagesFont =
+    pathname === "/messages"
+      ? typography.fontWeightBold
+      : typography.fontWeightMedium;
   return (
     // <Box
     //   className={"navbar"}
@@ -85,35 +99,40 @@ function Navbar(): JSX.Element {
     //   />
     // </Box>
 
-    <Box>
-      <List>
+    <List>
+      <CustomTypo variant="h3" padding={4} pt={3}>
+        <Link to="/" className="link">
+          Mini Instagram
+        </Link>
+      </CustomTypo>
+      <Stack direction={"column"} gap={1} width={"90%"} margin={"auto"}>
         <MyListItem>
-          <ListItemButton component={NavLink} to="/">
-            <ListItemIcon>
-              <AiFillHome />
-            </ListItemIcon>
-            <Typography
-              fontSize={"1.25rem"}
-              color={homeColor}
-              variant="subtitle1"
-            >
-              Home
-            </Typography>
+          <ListItemButton
+            sx={{ borderRadius: "50px" }}
+            component={NavLink}
+            to="/"
+          >
+            <MyListItemIcon>
+              <AiFillHome size={25} />
+              <CustomTypo variant="h6" fontWeight={homeFont}>
+                Home
+              </CustomTypo>
+            </MyListItemIcon>
           </ListItemButton>
         </MyListItem>
 
         <MyListItem>
-          <ListItemButton component={NavLink} to="/messages">
-            <ListItemIcon>
-              <FaFacebookMessenger />
-            </ListItemIcon>
-            <Typography
-              fontSize={"1.25rem"}
-              color={messagesColor}
-              variant="subtitle1"
-            >
-              Messages
-            </Typography>
+          <ListItemButton
+            sx={{ borderRadius: "50px" }}
+            component={NavLink}
+            to="/messages"
+          >
+            <MyListItemIcon>
+              <FaFacebookMessenger size={25} />
+              <CustomTypo variant="h6" fontWeight={messagesFont}>
+                Messages
+              </CustomTypo>
+            </MyListItemIcon>
           </ListItemButton>
         </MyListItem>
 
@@ -124,20 +143,21 @@ function Navbar(): JSX.Element {
             setIsOpen={setIsOpen}
           >
             <ListItemButton
+              sx={{ borderRadius: "50px" }}
               onClick={() => {
                 setIsOpen(true);
               }}
             >
-              <ListItemIcon></ListItemIcon>
-              <Typography fontSize={"1.25rem"} variant="subtitle1">
-                Add
-              </Typography>
+              <MyListItemIcon>
+                <FaRegPlusSquare size={25} />
+                <CustomTypo variant="h6">Create</CustomTypo>
+              </MyListItemIcon>
             </ListItemButton>
             <CreatePost />
           </CustomModal>
         </MyListItem>
-      </List>
-    </Box>
+      </Stack>
+    </List>
   );
 }
 

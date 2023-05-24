@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import Register from "./Components/AuthArea/Register/Register";
 import GuestLayout from "./Components/GuestLayout/GuestLayout";
@@ -11,9 +11,19 @@ import { useEffect, useState } from "react";
 import { authService } from "./services/authService";
 
 function App() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    authService.getLogin().finally(() => setLoading(false));
+    authService
+      .getLogin()
+      .then(() => {
+        setLoading(false);
+        navigate("/");
+      })
+      .catch(() => {
+        setLoading(false);
+        navigate("/auth/login");
+      });
   }, []);
 
   return loading ? (

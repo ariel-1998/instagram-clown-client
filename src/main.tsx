@@ -8,6 +8,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from "./lib/store.ts";
 import { BrowserRouter } from "react-router-dom";
+import axios from "axios";
+import { apiConfig } from "./utils/apiConfig.ts";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./utils/theme.ts";
 
 const staleTime = 20 * 60 * 1000;
 
@@ -20,20 +24,24 @@ const queryClient = new QueryClient({
   },
 });
 
+axios.defaults.baseURL = apiConfig.BASE_URL;
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <App />
-          <ToastContainer
-            position="top-center"
-            hideProgressBar={true}
-            autoClose={2000}
-            theme={"dark"}
-          />
-        </Provider>
-      </QueryClientProvider>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <App />
+            <ToastContainer
+              position="top-center"
+              hideProgressBar={true}
+              autoClose={2000}
+              theme={"dark"}
+            />
+          </Provider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

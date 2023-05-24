@@ -48,12 +48,6 @@ export const userSchema = z.object({
     .string()
     .max(100, "About section can contain up to 100 chars")
     .optional(),
-
-  //   role: z.nativeEnum(UserRole),
-
-  //   isActive: z.nativeEnum(IsActive),
 });
 
 export type UserSchema = z.infer<typeof userSchema>;
-
-export interface UserForm extends UserSchema, FormData {}

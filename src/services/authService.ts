@@ -10,19 +10,15 @@ class AuthService {
   private logoutEndpoint = "/auth/login";
 
   async register(user: UserSchema) {
-    const { data } = await axios.post<UserModel>(
-      apiConfig.BASE_URL + this.registerEndpoint,
-      user,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.post<UserModel>(this.registerEndpoint, user, {
+      withCredentials: true,
+    });
     store.dispatch(login(data));
   }
 
   async login(credentials: UserSchema) {
     const { data } = await axios.post<UserModel>(
-      apiConfig.BASE_URL + this.loginEndpoint,
+      this.loginEndpoint,
       credentials,
       {
         withCredentials: true,
@@ -32,17 +28,14 @@ class AuthService {
   }
 
   async getLogin() {
-    const { data } = await axios.get<UserModel>(
-      apiConfig.BASE_URL + this.loginEndpoint,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.get<UserModel>(this.loginEndpoint, {
+      withCredentials: true,
+    });
     store.dispatch(login(data));
   }
 
   async logout() {
-    await axios.delete(apiConfig.BASE_URL + this.logoutEndpoint, {
+    await axios.delete(this.logoutEndpoint, {
       withCredentials: true,
     });
     store.dispatch(logout());

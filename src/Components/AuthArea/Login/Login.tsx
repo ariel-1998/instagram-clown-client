@@ -1,27 +1,68 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
-  Button,
   CircularProgress,
-  Stack,
+  Grid,
+  TextField,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
-import { UserSchema, userSchema, UserForm } from "../../../models/UserModel";
+import { UserSchema, userSchema } from "../../../models/UserModel";
 import { authService } from "../../../services/authService";
 import { notifyService } from "../../../services/notifyService";
-import CustomFormGroup from "../../CustomComponents/CustomFormGroup/CustomFormGroup";
 import "./Login.css";
 import CustomButton from "../../CustomComponents/CustomButton/CustomButton";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import loginImg from "../../../assets/login.jpg";
+import CustomTypo from "../../CustomComponents/CustomTypo";
+
+const LoginPage = styled("div")(({ theme }) => ({
+  flex: 1,
+  [theme.breakpoints.up("md")]: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: 35,
+  },
+  [theme.breakpoints.down("md")]: {
+    display: "flex",
+    justifyContent: "center",
+  },
+}));
+
+const FormWrap = styled("div")(({ theme }) => ({
+  marginTop: 40,
+  marginBottom: 40,
+  border: "1px solid black",
+  width: "300px",
+  padding: 60,
+  height: 450,
+  justifySelf: "start",
+  [theme.breakpoints.down("md")]: {
+    margin: "20px 0",
+  },
+}));
+
+const Image = styled("img")(({ theme }) => ({
+  display: "block",
+  margin: "40px 0",
+  width: "500px",
+  height: "570px",
+  justifySelf: "end",
+  [theme.breakpoints.down("lg")]: {
+    width: "410px",
+  },
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
+}));
 
 function Login(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -30,12 +71,13 @@ function Login(): JSX.Element {
   } = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
   });
-  const { username, password } = watch();
+  const { password } = watch();
 
   const onSubmit = async (data: UserSchema) => {
     setIsLoading(true);
     try {
       await authService.login(data);
+
       navigate("/");
     } catch (error) {
       notifyService.error(error);
@@ -43,45 +85,32 @@ function Login(): JSX.Element {
     }
   };
 
-  return (
-    <Box
-      display="grid"
-      gridTemplateColumns="repeat(2, 1fr)"
-      gap={2}
-      height={"100%"}
-    >
-      <p>asdas</p>
-      <form
-        className="form"
-        onSubmit={handleSubmit(onSubmit)}
-        style={{ width: "max-content", height: "max-content" }}
-      >
-        <Box display="grid" gap={2} width={"100%"}>
-          <Typography
-            textAlign={"center"}
-            variant="h6"
-            component="div"
-            sx={{ p: 0 }}
-          >
+  const form = (
+    <FormWrap>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+        <Grid direction={"column"} container gap={2}>
+          <CustomTypo textAlign="center" variant="h3">
             Login
-          </Typography>
-          <CustomFormGroup
-            sx={{ width: 300 }}
-            isDirty={username}
-            type={"text"}
-            label={"username"}
+          </CustomTypo>
+
+          <TextField
+            label="username"
+            variant="outlined"
+            type="text"
             {...register("username")}
-            errors={errors}
+            fullWidth
           />
+          {/* {errors?.username && (
+            <Typography>{errors.username.message}</Typography>
+          )} */}
           <Box className="relative">
-            <CustomFormGroup
-              sx={{ width: 300 }}
-              isDirty={password}
+            <TextField
+              label="password"
+              variant="outlined"
               type={show ? "text" : "password"}
               autoComplete="off"
-              label={"password"}
               {...register("password")}
-              errors={errors}
+              fullWidth
             />
 
             {password && (
@@ -93,7 +122,9 @@ function Login(): JSX.Element {
               </Box>
             )}
           </Box>
-
+          {/* {errors?.password && (
+            <Typography>{errors.password.message}</Typography>
+          )} */}
           <CustomButton
             type="submit"
             sx={{ mt: 1, height: 30, bgcolor: "rgb(0, 149, 246)" }}
@@ -104,9 +135,18 @@ function Login(): JSX.Element {
               <CircularProgress size={16} sx={{ color: "#fff" }} />
             )}
           </CustomButton>
-        </Box>
+        </Grid>
       </form>
-    </Box>
+      <CustomTypo textAlign="center" variant="body1">
+        Dont have an account? <Link to={"/auth/register"}>Register now</Link>
+      </CustomTypo>
+    </FormWrap>
+  );
+  return (
+    <LoginPage>
+      <Image src={loginImg} />
+      {form}
+    </LoginPage>
   );
 }
 

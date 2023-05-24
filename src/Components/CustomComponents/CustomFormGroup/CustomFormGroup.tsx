@@ -65,10 +65,9 @@ function CustomFormGroup(
   );
 
   const content = (
-    <Box component={"div"} className="CustomFormGroup" sx={{ pb: 3 }}>
+    <Box component={"div"} className="CustomFormGroup" sx={{ pb: 8 }}>
       <FormGroup
         sx={{
-          height: "fit-content",
           position: "relative",
           bgcolor: "rgb(250, 250, 250)",
         }}
