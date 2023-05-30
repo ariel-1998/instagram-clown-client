@@ -16,7 +16,7 @@ import SuggestedUsers from "./SuggestedUsers/SuggestedUsers";
 function Home(): JSX.Element {
   return (
     <Box flex={1}>
-      <SuggestedUsers hasPosts={false} />
+      <SuggestedUsers hasPosts={!true} />
     </Box>
   );
 }

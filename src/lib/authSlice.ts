@@ -17,6 +17,16 @@ const authSlice = createSlice({
       state = null;
       return null;
     },
+    increaseFollowing: (state) => {
+      if (!state) return; //check if i can do  state?.followingAmount += 1; optional chaining
+      state.followingAmount += 1;
+      return state;
+    },
+    decreaseFollowing: (state) => {
+      if (!state) return; //check if i can do  state?.followingAmount += 1; optional chaining
+      state.followingAmount -= 1;
+      return state;
+    },
   },
 });
 

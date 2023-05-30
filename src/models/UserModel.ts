@@ -12,7 +12,7 @@ export enum BooleanDB {
 
 export interface UserModel {
   id: number;
-  profileImg?: FileList;
+  profileImg?: string;
   username: string;
   password?: string;
   aboutMe?: string;

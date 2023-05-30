@@ -14,44 +14,70 @@ import {
 import CustomButton from "../../../CustomComponents/CustomButton/CustomButton";
 import CustomTypo from "../../../CustomComponents/CustomTypo";
 import { Link } from "react-router-dom";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { followerService } from "../../../../services/followerService";
 import { notifyService } from "../../../../services/notifyService";
 import { queryKeys } from "../../../../utils/globalVariables";
+import { userService } from "../../../../services/userService";
+import { useState } from "react";
+import { apiConfig } from "../../../../utils/apiConfig";
 
 interface SingleUserProps {
   user: UserModel;
   hasPosts: boolean;
+  onFollow: (userId: number) => void;
 }
 
-function SingleUser({ user, hasPosts }: SingleUserProps): JSX.Element {
-  const queryClient = useQueryClient();
+function SingleUser({
+  user,
+  hasPosts,
+  onFollow,
+}: SingleUserProps): JSX.Element {
+  const [img, setImg] = useState("");
+
+  useQuery(
+    queryKeys.userProfileImg(user?.profileImg),
+    () => userService.getUserProfileImg(user?.profileImg || ""),
+    { onSuccess: (data) => setImg(URL.createObjectURL(data)) }
+  );
 
   const followMutation = useMutation({
-    mutationFn: followerService.follow,
+    mutationFn: user.isfollowed
+      ? followerService.unfollow
+      : followerService.follow,
     onError: (e) => notifyService.error(e),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKeys.suggestedUsers);
-      //onsucess i should get user data again to make followingAmount update (from redux and not new request)
-    },
+    onSuccess: () => onFollow(user.id),
   });
 
-  const followClick = (followedId: number) => {
-    followMutation.mutate(followedId);
+  const followClick = (userId: number) => {
+    followMutation.mutate(userId);
   };
+
+  const linkClass = hasPosts ? "flex-row" : "";
+  const classes = hasPosts
+    ? {
+        flexDirection: "column",
+
+        maxWidth: 200,
+      }
+    : {};
   return (
-    <ListItem disablePadding sx={{ px: 2, py: 1 }}>
-      <Link to={`users/${user.id}`} className="link">
-        <ListItemButton>
-          <Avatar src="" />
-          <ListItemText sx={{ px: 2 }} primary={user.username} />
-        </ListItemButton>
+    <ListItem
+      disablePadding
+      sx={{ px: 1, py: 0.5, placeContent: "space-between", ...classes }}
+    >
+      <Link
+        to={`users/${user.id}`}
+        className={`link profile-img-link ${linkClass}`}
+      >
+        <Avatar sx={{ width: 50, height: 50 }} src={img} />
+        <ListItemText sx={{ px: 2 }} primary={user.username} />
       </Link>
       <CustomButton
         sx={{ width: 90, height: 33 }}
         onClick={() => followClick(user.id)}
       >
-        {hasPosts ? user.id : "hello"}
+        {user.isfollowed ? "Following" : "follow"}
       </CustomButton>
     </ListItem>
   );

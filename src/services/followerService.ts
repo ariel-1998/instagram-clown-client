@@ -1,19 +1,16 @@
 import axios from "axios";
 import { FollowModel } from "../models/FollowsModel";
 
-class FollowerService {
-  private followsEndpoint = "/follows";
+const followsEndpoint = "/follows";
 
+class FollowerService {
   async follow(followedId: number) {
-    await axios.post(
-      this.followsEndpoint,
-      { followedId },
-      { withCredentials: true }
-    );
+    axios.post(followsEndpoint, { followedId }, { withCredentials: true });
   }
 
-  async unfollow({ followedId }: FollowModel) {
-    await axios.delete(`${this.followsEndpoint}/${followedId}`, {
+  async unfollow(followedId: number) {
+    console.log(followsEndpoint);
+    axios.delete(`${followsEndpoint}/${followedId}`, {
       withCredentials: true,
     });
   }
