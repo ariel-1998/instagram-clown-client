@@ -15,7 +15,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state = null;
-      return null;
+      return state;
     },
     increaseFollowing: (state) => {
       if (!state) return; //check if i can do  state?.followingAmount += 1; optional chaining
@@ -30,6 +30,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, increaseFollowing, decreaseFollowing } =
+  authSlice.actions;
 
 export default authSlice.reducer;

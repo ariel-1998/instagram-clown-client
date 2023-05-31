@@ -19,7 +19,7 @@ export interface UserModel {
   role: UserRole;
   isActive: BooleanDB;
   isfollowed?: boolean;
-  followersAmout: number;
+  followersAmount: number;
   followingAmount: number;
   postsAmount: number;
 }

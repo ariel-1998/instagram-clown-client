@@ -2,10 +2,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import "./SuggestedUsers.css";
 import { queryKeys } from "../../../utils/globalVariables";
 import { userService } from "../../../services/userService";
-import SingleUser from "./SingleUser/SingleUser";
 import { Box, Divider, List, Stack, styled } from "@mui/material";
 import CustomTypo from "../../CustomComponents/CustomTypo";
 import { UserModel } from "../../../models/UserModel";
+import SingleUser from "./SingleUser/SingleUser";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../lib/store";
 
 interface SuggestedUsersProps {
   hasPosts: boolean;
@@ -58,21 +60,19 @@ function SuggestedUsers({ hasPosts }: SuggestedUsersProps): JSX.Element {
             <List
               sx={{
                 //need to delete after
-                bgcolor: "yellow",
                 p: 1,
               }}
             >
               <Stack direction={hasPosts ? "row" : "column"} gap={1}>
                 {users.map((user) => (
-                  <>
+                  <div key={user.id}>
                     <SingleUser
-                      key={user.id}
                       user={user}
                       hasPosts={hasPosts}
                       onFollow={updateOnFollow}
                     />
                     {dividerComponent}
-                  </>
+                  </div>
                 ))}
               </Stack>
             </List>

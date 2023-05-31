@@ -3,18 +3,27 @@ import { UserModel } from "../models/UserModel";
 import { apiConfig } from "../utils/apiConfig";
 
 class UserService {
-  private suggestedEndPoint = "/users";
-  private profileImgEndPoint = this.suggestedEndPoint + "/image/";
+  private suggestedEndpoint = "/users";
+  private profileImgEndPoint = this.suggestedEndpoint + "/image/";
 
-  async getSuggestedUsers() {
-    const { data } = await axios.get<UserModel[]>(this.suggestedEndPoint, {
+  async getSuggestedUsers(): Promise<UserModel[]> {
+    const { data } = await axios.get<UserModel[]>(this.suggestedEndpoint, {
       withCredentials: true,
     });
-    console.log(data);
     return data;
   }
 
-  async getUserProfileImg(profileImg: string) {
+  async getSingleUser(userId: number): Promise<UserModel> {
+    const { data } = await axios.get<UserModel>(
+      `${this.suggestedEndpoint}/${userId}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return data;
+  }
+
+  async getUserProfileImg(profileImg: string): Promise<string> {
     const { data } = await axios.get<Blob>(
       this.profileImgEndPoint + profileImg,
       {
@@ -22,9 +31,8 @@ class UserService {
         withCredentials: true,
       }
     );
-    console.log(data);
-
-    return data;
+    const url = URL.createObjectURL(data);
+    return url;
   }
 }
 
